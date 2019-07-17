@@ -32,13 +32,13 @@ def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
     
 def help(bot, update):
-    msg = "Usage: /book <keyword> and I will give you links to EPUB/PDF/MOBI/AZW3 :)\n"
+    msg = "Usage: /book <keyword> and I will give you links to EPUB/PDF/MOBI/AZW3 :)\n Enter /cancel to cancel search"
     update.message.reply_text(msg)
 
 def cancel(bot, update,user_data):
 	user = update.message.from_user
 	#logger.info("User %s canceled the conversation." % user.first_name)
-	update.message.reply_text('Cancellation Successful .\n type /start to search again :) ',
+	update.message.reply_text('Cancellation Successful :) ',
 							  reply_markup=ReplyKeyboardRemove())
 
 	return ConversationHandler.END
@@ -93,7 +93,7 @@ def book(bot, update, user_data):
             results['mirrors']={}
         mlist.append(results)
 
-    print(mlist)
+    #print(mlist)
     user_data['mlist']=mlist[1:]
     for i in range(len(mlist)-1):
         update.message.reply_text("id:"+mlist[i+1]["id"]+"\nauthor:"+mlist[i+1]["author"]+"\ntitle:"+mlist[i+1]["title"]+"\npublisher:"+mlist[i+1]["publisher"]+"\nyear:"+mlist[i+1]["year"]+"\nlanguage:"+mlist[i+1]["language"]+"\nsize:"+mlist[i+1]["size"]+"\nextension:"+mlist[i+1]["extension"])#+str(mlist[i+1]["mirrors"]))
@@ -118,6 +118,7 @@ def get_text(bot, update,user_data):
             break
     if not foundid:
         update.message.reply_text("Invalid ID")
+        return ConversationHandler.END
     else:
         print("valid")
         mirrors = mlist[int(index)]["mirrors"]
